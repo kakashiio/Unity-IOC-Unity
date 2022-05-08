@@ -4,6 +4,8 @@ Help to use IOCContainer more convenience.
 
 # Tutorial
 
+[中文向导](https://unity3d.io/2022/05/09/Unity-IOC-Unity/)
+
 ## Add dependencies
 
 You can add package from git url through the Package Manager.
