@@ -1,0 +1,21 @@
+{
+    "name": "io.unity3d.source.iocunity",
+    "displayName": "Source Framework IOC-Unity",
+    "version": "1.0.0",
+    "unity": "2020.3",
+    "description": "Component in Source Framework - IOC Unity Components for Unity",
+    "dependencies": {
+    },
+    "author": {
+        "name": "Kakashi",
+        "email": "john.cha@qq.com",
+        "url": "https://github.com/kakashiio/Unity-IOC-Unity"
+    },
+    "samples": [
+        {
+            "displayName": "Baisc usage about the ioc unity components",
+            "description": "Baisc usage about the ioc unity components",
+            "path": "Samples~/Basic"
+        }
+    ]
+}
