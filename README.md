@@ -28,7 +28,8 @@ The basic usage of `UnityIOCContainer` is in the sample script `BasicDemo.cs`
 ITypeContainer typeContainer = new TypeContainerCollection(new List<ITypeContainer>
     {
         new TypeContainer(Assembly.GetExecutingAssembly()),
-        new TypeContainer(typeof(IOCComponent).Assembly)
+        new TypeContainer(typeof(UnityIOCContainer).Assembly),
+        new TypeContainer(typeof(IOCContainer).Assembly)
     });
     new UnityIOCContainer(typeContainer);
 ```
