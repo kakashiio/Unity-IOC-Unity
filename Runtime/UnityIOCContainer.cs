@@ -17,19 +17,17 @@ namespace IO.Unity3D.Source.IOCUnity
     //******************************************
     public class UnityIOCContainer
     {
-        internal IIOCContainer IOCContainer;
+        public readonly IIOCContainer IOCContainer;
         internal IReadOnlyList<IUnityFixedUpdate> UnityFixedUpdates { get; }
         internal IReadOnlyList<IUnityUpdate> UnityUpdates { get; }
         internal IReadOnlyList<IUnityLateUpdate> UnityLateUpdates { get; }
         internal IReadOnlyList<IUnityApplication> UnityApplications { get;  }
         internal IReadOnlyList<IUnityEditor> UnityEditors { get; }
         internal IReadOnlyList<IUnityGUI> UnityGUIs { get; }
-        
-        public UnityIOCContainer(ITypeContainer typeContainer, IOCContainerConfiguration configuration = null)
+
+        public UnityIOCContainer(IIOCContainer iocContainer)
         {
-            IOCContainer = new IOCContainerBuilder(typeContainer)
-                .SetConfiguration(configuration)
-                .Build();
+            IOCContainer = iocContainer;
             
             UnityUpdates = _FindAndSort<IUnityUpdate>(IOCContainer);
             UnityLateUpdates = _FindAndSort<IUnityLateUpdate>(IOCContainer);
@@ -43,6 +41,11 @@ namespace IO.Unity3D.Source.IOCUnity
             UnityIOCContainerMono unityIOCContainerMono = gameObject.AddComponent<UnityIOCContainerMono>();
             unityIOCContainerMono.Init(this);
             gameObject.SetActive(true);
+        }
+
+        public UnityIOCContainer(ITypeContainer typeContainer, IOCContainerConfiguration configuration = null) 
+            : this(new IOCContainerBuilder(typeContainer).SetConfiguration(configuration).Build())
+        {
         }
 
         private IReadOnlyList<T> _FindAndSort<T>(IIOCContainer iocContainer) where T : class
