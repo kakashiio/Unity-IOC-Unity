@@ -11,5 +11,6 @@ namespace IO.Unity3D.Source.IOCUnity
     {
         void OnApplicationQuit();
         void OnApplicationPause(bool pauseStatus);
+        void OnApplicationFocus(bool hasFocus);
     }
 }
