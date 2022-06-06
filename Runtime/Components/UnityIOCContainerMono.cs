@@ -79,6 +79,14 @@ namespace IO.Unity3D.Source.IOCUnity
             }
         }
 
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            for (int i = 0; i < _UnityApplications.Count; i++)
+            {
+                _UnityApplications[i].OnApplicationFocus(hasFocus);
+            }
+        }
+
         private void OnApplicationPause(bool pauseStatus)
         {
             for (int i = 0; i < _UnityApplications.Count; i++)
