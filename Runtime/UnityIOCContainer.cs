@@ -17,7 +17,11 @@ namespace IO.Unity3D.Source.IOCUnity
     //******************************************
     public class UnityIOCContainer
     {
-        public readonly IIOCContainer IOCContainer;
+        public IIOCContainer IOCContainer { get; private set; }
+        
+        public UnityIOCContainerMono UnityIOCContainerMono { get; private set; }
+        public GameObject UnityIOCContainerObject { get; private set; }
+        
         internal IReadOnlyList<IUnityFixedUpdate> UnityFixedUpdates { get; }
         internal IReadOnlyList<IUnityUpdate> UnityUpdates { get; }
         internal IReadOnlyList<IUnityLateUpdate> UnityLateUpdates { get; }
@@ -25,9 +29,11 @@ namespace IO.Unity3D.Source.IOCUnity
         internal IReadOnlyList<IUnityEditor> UnityEditors { get; }
         internal IReadOnlyList<IUnityGUI> UnityGUIs { get; }
 
-        public UnityIOCContainer(IIOCContainer iocContainer)
+        public UnityIOCContainer(ITypeContainer typeContainer, IOCContainerConfiguration configuration = null)
         {
-            IOCContainer = iocContainer;
+            IOCContainer = new IOCContainerBuilder(typeContainer)
+                .SetConfiguration(configuration)
+                .Build();
             
             UnityUpdates = _FindAndSort<IUnityUpdate>(IOCContainer);
             UnityLateUpdates = _FindAndSort<IUnityLateUpdate>(IOCContainer);
@@ -41,11 +47,34 @@ namespace IO.Unity3D.Source.IOCUnity
             UnityIOCContainerMono unityIOCContainerMono = gameObject.AddComponent<UnityIOCContainerMono>();
             unityIOCContainerMono.Init(this);
             gameObject.SetActive(true);
+            
+            UnityIOCContainerObject = gameObject;
+            UnityIOCContainerMono = unityIOCContainerMono;
         }
 
-        public UnityIOCContainer(ITypeContainer typeContainer, IOCContainerConfiguration configuration = null) 
-            : this(new IOCContainerBuilder(typeContainer).SetConfiguration(configuration).Build())
+        public void Destroy()
         {
+            GameObject.Destroy(UnityIOCContainerObject);
+            UnityIOCContainerObject = null;
+            UnityIOCContainerMono = null;
+        }
+
+        public void Pause(PauseOrResume pauseOrResume = PauseOrResume.All)
+        {
+            if (UnityIOCContainerMono == null)
+            {
+                return;
+            }
+            UnityIOCContainerMono.Pause(pauseOrResume);
+        }
+
+        public void Resume(PauseOrResume pauseOrResume = PauseOrResume.All)
+        {
+            if (UnityIOCContainerMono == null)
+            {
+                return;
+            }
+            UnityIOCContainerMono.Resume(pauseOrResume);
         }
 
         private IReadOnlyList<T> _FindAndSort<T>(IIOCContainer iocContainer) where T : class
